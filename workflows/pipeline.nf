@@ -1,7 +1,7 @@
-include { SUBWORKFLOW } from "../subworkflows/example/main.nf"
+include { TAXONOMY } from "../subworkflows/taxonomy/main.nf"
 
 workflow PIPELINE {
-
-    SUBWORKFLOW()
+    proteins = [[id: "test"],params.input_proteins]
+    TAXONOMY(proteins)
 
 }
