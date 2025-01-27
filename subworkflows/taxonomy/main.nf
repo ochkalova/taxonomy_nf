@@ -5,14 +5,22 @@ workflow TAXONOMY {
     take:
     contigs                     // [ val(meta), path(file) ]
     proteins                    // [ val(meta), path(file) ]
-    diamond_db                  // [ val(meta), path(db_folder)  ]
+    cat_db                      // [ val(meta), path(db_folder)  ]
     taxonomy_db                 // [ val(meta), path(tax_folder) ]
 
     main:
+
+    Channel.of(cat_db)
+        .map { meta, folder ->
+            [meta, file("$folder/*.dmnd")]
+        }
+        .set {diamond_db}
+
     DIAMOND_BLASTP(proteins, diamond_db, "txt", [])
-    // CAT does not use contigs, diamond_db and, possibly, proteins
-    // However this options are obligatory in the source python CAT program
-    CATPACK_CONTIGS(contigs, diamond_db, taxonomy_db, proteins, DIAMOND_BLASTP.out.txt)
+
+    // CAT does not use provided cat_db because alignment is already done by Diamond
+    // However this option is obligatory in the CAT source python code
+    CATPACK_CONTIGS(contigs, cat_db, taxonomy_db, proteins, DIAMOND_BLASTP.out.txt)
 
     emit:
     output = DIAMOND_BLASTP.out.txt
