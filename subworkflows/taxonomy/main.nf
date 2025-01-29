@@ -23,5 +23,6 @@ workflow TAXONOMY {
     CATPACK_CONTIGS(contigs, cat_db, taxonomy_db, proteins, DIAMOND_BLASTP.out.txt)
 
     emit:
-    output = DIAMOND_BLASTP.out.txt
+    diamond_output = DIAMOND_BLASTP.out.txt
+    cat_output = CATPACK_CONTIGS.out.contig2classification
 }
