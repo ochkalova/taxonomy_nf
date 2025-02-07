@@ -11,7 +11,6 @@ workflow PIPELINE {
             contigs: [ meta, contig ]
             proteins: [ meta, protein ]
         }
-    taxonomy_input_ch.contigs.view()
 
     diamond_db = [[id: "CAT"],params.db_folder]
     taxonomy_db = [[id: "CAT"],params.tax_folder]
