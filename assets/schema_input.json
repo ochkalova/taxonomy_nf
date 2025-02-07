@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "",
+    "title": "params.input schema",
+    "description": "Schema for the file provided with params.input",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "sample": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Sample name must be provided and cannot contain spaces",
+                "meta": ["id"]
+            },
+            "contigs": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.(fna|fasta|fa)(\\.gz)?$",
+                "description": "Fasta file for assembly, cannot contain spaces and must have extension '.fna', '.fasta', '.fa', '.fna.gz', '.fasta.gz' or '.fa.gz'"
+            },
+            "proteins": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.(fa|fasta|faa|fas)(\\.gz)?$",
+                "description": "Fasta file for predicted proteins, cannot contain spaces and must have extension '.fa', '.fasta', '.faa', '.fas', '.fa.gz', '.fasta.gz', '.faa.gz' or '.fas.gz'"
+            }
+        },
+        "required": ["sample", "contigs", "proteins"]
+    }
+}
