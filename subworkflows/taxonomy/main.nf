@@ -16,7 +16,7 @@ workflow TAXONOMY {
         }
         .set {diamond_db}
 
-    DIAMOND_BLASTP(proteins, diamond_db, "txt", [])
+    DIAMOND_BLASTP(proteins, diamond_db, 6, [])
 
     // CAT does not use provided cat_db because alignment is already done by Diamond
     // However this option is obligatory in the CAT source python code
@@ -25,4 +25,5 @@ workflow TAXONOMY {
     emit:
     diamond_output = DIAMOND_BLASTP.out.txt
     cat_output = CATPACK_CONTIGS.out.contig2classification
+
 }
