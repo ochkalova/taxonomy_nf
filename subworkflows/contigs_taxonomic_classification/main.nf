@@ -26,12 +26,22 @@ workflow CONTIGS_TAXONOMIC_CLASSIFICATION {
     )
     ch_versions = ch_versions.mix(DIAMOND_BLASTP.out.versions.first())
 
+    contigs
+        .join(proteins)
+        .join(DIAMOND_BLASTP.out.txt)
+        .multiMap { meta, contigs, proteins, diamond_txt ->
+            contigs: [meta, contigs]
+            proteins: [meta, proteins]
+            diamond_txt: [meta, diamond_txt]
+        }
+        .set { catpack_input_ch }
+
     CATPACK_CONTIGS(
-        contigs,
+        catpack_input_ch.contigs,
         cat_db,
         taxonomy_db,
-        proteins,
-        DIAMOND_BLASTP.out.txt
+        catpack_input_ch.proteins,
+        catpack_input_ch.diamond_txt
     )
     ch_versions = ch_versions.mix(CATPACK_CONTIGS.out.versions.first())
 
@@ -39,4 +49,4 @@ workflow CONTIGS_TAXONOMIC_CLASSIFICATION {
     diamond_blast_tsv         = DIAMOND_BLASTP.out.txt
     contig2classification_tsv = CATPACK_CONTIGS.out.contig2classification
     versions                  = ch_versions
-}
+    }
